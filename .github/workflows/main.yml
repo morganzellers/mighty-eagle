@@ -31,4 +31,4 @@ jobs:
 
       # Runs a set of commands using the runners shell
       - name: Python Tests
-        run: python -m unittest test_directory_traversal
+        run: python -m unittest test_mortgage_calculator

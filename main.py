@@ -1,36 +1,43 @@
-import os
-import datetime
+class MortgageCalculator:
+    def __init__(self, principal, annual_interest_rate, years):
+        self.principal = principal
+        self.annual_interest_rate = annual_interest_rate
+        self.years = years
+        self.monthly_interest_rate = annual_interest_rate / 12 / 100
+        self.monthly_payments = self.calculate_monthly_payments()
 
-class DirectoryTraversal:
-    def __init__(self, directory):
-        self.directory = directory
+    def calculate_monthly_payments(self):
+        num_months = self.years * 12
+        if self.monthly_interest_rate == 0:
+            return self.principal / num_months
+        else:
+            monthly_payment = (self.principal * self.monthly_interest_rate) / (1 - (1 + self.monthly_interest_rate) ** -num_months)
+            return monthly_payment
 
-    def list_files_created_dates(self):
-        for root, dirs, files in os.walk(self.directory):
-            for file in files:
-                file_path = os.path.join(root, file)
-                created_date = self.get_file_creation_date(file_path)
-                if created_date:
-                    print(f"File: {file_path}, Created Date: {created_date}")
+    def display_amortization_schedule(self):
+        num_months = self.years * 12
+        remaining_balance = self.principal
+        amortization_schedule = []
+        
+        amortization_schedule.append(f"Principal: ${self.principal}")
+        amortization_schedule.append(f"Annual Interest Rate: {self.annual_interest_rate}%")
+        amortization_schedule.append(f"Loan Term: {self.years} years")
+        amortization_schedule.append(f"Monthly Payment: ${self.monthly_payments:.2f}")
+        amortization_schedule.append("\nAmortization Schedule:")
+        amortization_schedule.append("{:<10} {:<15} {:<15} {:<15}".format("Month", "Payment", "Interest", "Balance"))
 
-    @staticmethod
-    def get_file_creation_date(file_path):
-        try:
-            # Get file modification time
-            modification_time = os.path.getmtime(file_path)
+        for month in range(1, num_months + 1):
+            interest_payment = remaining_balance * self.monthly_interest_rate
+            principal_payment = self.monthly_payments - interest_payment
+            remaining_balance -= principal_payment
+            amortization_schedule.append("{:<10} ${:<15.2f} ${:<15.2f} ${:<15.2f}".format(month, self.monthly_payments, interest_payment, remaining_balance))
 
-            # Convert modification time to a datetime object
-            created_date = datetime.datetime.fromtimestamp(modification_time)
-
-            return created_date
-        except Exception as e:
-            print(f"Error accessing creation date for {file_path}: {str(e)}")
-            return None
+        return "\n".join(amortization_schedule)
 
 if __name__ == "__main__":
-    directory_to_traverse = "/Users/mo/Documents/workspace"  # Replace with the directory you want to traverse
-    if os.path.exists(directory_to_traverse) and os.path.isdir(directory_to_traverse):
-        dt = DirectoryTraversal(directory_to_traverse)
-        dt.list_files_created_dates()
-    else:
-        print("The specified directory does not exist or is not a valid directory.")
+    principal = float(input("Enter the loan amount (principal): $"))
+    annual_interest_rate = float(input("Enter the annual interest rate (%): "))
+    years = int(input("Enter the loan term (years): "))
+
+    calculator = MortgageCalculator(principal, annual_interest_rate, years)
+    calculator.display_amortization_schedule()
