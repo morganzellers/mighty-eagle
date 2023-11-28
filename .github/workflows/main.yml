@@ -28,20 +28,20 @@ jobs:
 
       - name: Run Pylint
         id: pylint
-        run: pylint --output-format=text --output=pylint_results.txt .
+        run: pylint *.py
 
-      - name: Capture Pylint Results
-        run: echo "{pylint-results}={$(cat pylint.txt)}" >> $GITHUB_OUTPUT
-        if: always()
+      # - name: Capture Pylint Results
+      #   run: echo "{pylint-results}={$(cat pylint.txt)}" >> $GITHUB_OUTPUT
+      #   if: always()
 
-  analyze-results:
-    needs: lint
-    runs-on: ubuntu-latest
+  # analyze-results:
+  #   needs: lint
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Print Pylint Results
-        run: |
-          echo "Pylint Results: ${{ env.pylint-results }}"
+  #   steps:
+  #     - name: Print Pylint Results
+  #       run: |
+  #         echo "Pylint Results: ${{ env.pylint-results }}"
 
   build:
     runs-on: ubuntu-latest
