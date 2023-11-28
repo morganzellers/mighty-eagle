@@ -36,13 +36,20 @@ def calculate_mortgage():
         annual_interest_rate_data = float(data['annual_interest_rate'])
         years_data = int(data['years'])
 
+        input_validation_exceptions = (ValueError, KeyError, TypeError)
+
         calc = MortgageCalculator(principal_data, annual_interest_rate_data, years_data)
         monthly_payment = calc.calculate_monthly_payments()
 
         return jsonify({'monthly_payment': monthly_payment})
-    except Exception as e:
-        print(e)
+
+    except input_validation_exceptions as e:
+        print(f"Input validation error: {e}")
         return jsonify({'error': 'Invalid input data'}), 400
+
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        return jsonify({'error': 'Internal server error'}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
