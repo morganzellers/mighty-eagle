@@ -25,7 +25,6 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
-          pip install pylint
 
       - name: Run Pylint
         id: pylint
@@ -48,6 +47,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.x
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
       # Runs a set of commands using the runners shell
       - name: Python Tests
         run: python3 -m unittest TestMortgageCalculator.py
