@@ -61,7 +61,7 @@ jobs:
 
       # Runs a set of commands using the runners shell
       - name: Python Tests
-        run: python3 -m unittest TestMortgageCalculator.py
+        run: python3 -m unittest test_mortgage_calculator.py
 
   # Add a new job for the PR gate
   pr_gate:
@@ -84,4 +84,4 @@ jobs:
 
       - name: Run unit tests for PR gate
         run: |
-          python -m unittest TestMortgageCalculator.py
+          python -m unittest test_mortgage_calculator.py

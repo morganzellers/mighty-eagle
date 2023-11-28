@@ -1,5 +1,5 @@
 import unittest
-from MortgageCalculator import MortgageCalculator
+from mortgage_calculator import MortgageCalculator
 
 class TestMortgageCalculator(unittest.TestCase):
     def test_calculate_monthly_payments(self):
